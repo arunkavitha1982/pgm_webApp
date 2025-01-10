@@ -55,17 +55,10 @@ $(document).ready(function () {
         ]).draw(false).node();
         $(rowNode).find('td:first').addClass('details-control');
     }
-    function togglePaymentMode(event){
-        console.log("event")
-    }
-    
+     
 
 
     function format(rowData) {
-
-        console.log(rowData)
-       
-        const workStartedTime = new Date(rowData.work_started_time).toISOString().split('T')[0];
         return `
             <tr class="collapse-content details-row">
                 <td colspan="8">
@@ -80,18 +73,21 @@ $(document).ready(function () {
                                 <input type="datetime-local" class="input-bottom-border mt-1" style="background:transparent; "
                                     id="start-time-${rowData.ticket_id}" 
                                     value="${rowData.work_started_time}">
+                                    <p id="start-time-field-${rowData.ticket_id}" style="color:red;display:none">Please fill the field</p>
                             </div>
 
                              <div class="input-container mt-2" style="text-align:left !important;  padding:0 !important">
                                 <label for="end-time">Work ended time :</label>
                                 <input type="datetime-local" class="input-bottom-border mt-1" style="background:transparent"
                                     id="end-time-${rowData.ticket_id}" 
-                                    value="${rowData.work_ended_time}">                                
+                                    value="${rowData.work_ended_time}">
+                                    <p id="end-time-field-${rowData.ticket_id}"  style="color:red;display:none">Please fill the field</p>                                
                             </div>  
                              <div class="mt-2">
                             <label for="notes-${rowData.ticket_id}">Employee notes:</label>
-                            <textarea id="notes-${rowData.ticket_id}" rows="3" class="form-control  textarea mt-2" placeholder="Add notes here..." style="background:transparent" >${rowData.employee_notes}</textarea>
-                        </div>
+                            <textarea id="notes-${rowData.ticket_id}" rows="3" class="form-control  textarea mt-2" placeholder="Add notes here..." style="background:transparent" >${rowData.employee_notes || ""}</textarea>
+                        <p id="notes-field-${rowData.ticket_id}"  style="color:red;display:none">Please fill the field</p>
+                            </div>
                            
                             </div>
                        <div class="col-md-2"></div>
@@ -101,29 +97,31 @@ $(document).ready(function () {
                        <div class="image-gallery row g-2 ">
                                          <!-- Upload 1 -->
                                         <div class="col-5 col-sm-4 col-md-4">
-                                                <div class="uploads position-relative border" style="width: 100%; height: 100px;">
-                                                    <input type="file" id="upload1-${rowData.ticket_id}-${rowData.id}"  
-                                                            accept="image/*" 
-                                                            onchange="handleFileSelect1(event)"
-                                                            class="position-absolute top-0 start-0 w-100 h-100 opacity-0"
-                                                        />
-                                                    ${rowData.photo_1 ? `
-                                                    <img 
-                                                        id="image-preview1-${rowData.ticket_id}-${rowData.id}" 
-                                                        src="${rowData.photo_1}" 
-                                                        alt="Uploaded Image" 
-                                                        style="width:95%;height:95px"
-                                                    />
-                                                  ` : `
-                                                    <label 
-                                                        for="upload1-${rowData.ticket_id}-${rowData.id}"  
-                                                        class="d-flex align-items-center justify-content-center w-100 h-100 fw-bold text-success" 
-                                                        style="cursor: pointer; font-size: 24px;">
-                                                        +
-                                                    </label>
-                                                    `}
-                                              </div>
+                                        <div class="uploads position-relative border" style="width: 100%; height: 100px;">
+                                            <input                                                type="file" 
+                                                id="upload1-${rowData.ticket_id}-${rowData.id}" 
+                                                accept="image/*" 
+                                                onchange="handleFileSelect1(event)"
+                                                class="position-absolute top-0 start-0 w-100 h-100 opacity-0" 
+                                            />
+                                            ${rowData.photo_1 ? `
+                                            <img 
+                                                id="image-preview1-${rowData.ticket_id}-${rowData.id}" 
+                                                src="${rowData.photo_1}" 
+                                                alt="Uploaded Image" 
+                                                style="width:100%;height:95px " 
+                                                style=" " 
+                                            />
+                                            ` : `
+                                            <label 
+                                                for="upload1-${rowData.ticket_id}-${rowData.id}"  
+                                                class="d-flex align-items-center justify-content-center w-100 h-100 fw-bold text-success" 
+                                                style="cursor: pointer; font-size: 24px;">
+                                                +
+                                            </label>
+                                            `}
                                         </div>
+                                    </div>
 
                                             <!-- Upload 2 -->
                                         <div class="col-5 col-sm-4 col-md-4">
@@ -140,7 +138,7 @@ $(document).ready(function () {
                                                         id="image-preview2-${rowData.ticket_id}-${rowData.id}" 
                                                         src="${rowData.photo_2}" 
                                                         alt="Uploaded Image" 
-                                                        style="width:95%;height:95px " 
+                                                        style="width:100%;height:95px " 
                                                         
                                                     />
                                                     ` : `
@@ -169,7 +167,7 @@ $(document).ready(function () {
                                                 id="image-preview3-${rowData.ticket_id}-${rowData.id}" 
                                                 src="${rowData.photo_3}" 
                                                 alt="Uploaded Image" 
-                                                style="width:95%;height:95px " 
+                                                style="width:100%;height:95px " 
                                                 style=" " 
                                             />
                                             ` : `
@@ -331,7 +329,7 @@ $(document).ready(function () {
     // Event listener for the completed button
     $(document).on('click', '.completed-button', async function () {
         const loadingIndicator = document.getElementById('l');
-        loadingIndicator.style.display = 'flex';
+      
 
         const ticketID = $(this).data('ticket-id');
         const ticket_id = this.getAttribute("data-ticket-id");
@@ -343,7 +341,16 @@ $(document).ready(function () {
         const amount = document.getElementById(`payment-amount-${ticket_id}`).value
         const payment_mode = document.getElementById(`payment-mode-${ticket_id}`).value
         
-
+        if(!workEndedTime && !workEndedTime && !notes){
+            document.getElementById(`start-time-field-${ticket_id}`).style.display="block";
+            document.getElementById(`end-time-field-${ticket_id}`).style.display="block";
+            document.getElementById(`notes-field-${ticket_id}`).style.display="block";
+            return;
+        }
+        loadingIndicator.style.display = 'flex';
+        document.getElementById(`start-time-field-${ticket_id}`).style.display="none";
+        document.getElementById(`end-time-field-${ticket_id}`).style.display="none";
+        document.getElementById(`notes-field-${ticket_id}`).style.display="none";
         const requestBody = {
             company_id: localStorage.getItem("cid"),
             employee_id: localStorage.getItem("eid"),
@@ -440,8 +447,9 @@ $(document).ready(function () {
                 <div class="show-more" style="display:none">
                     <p><strong>Customer Address:</strong> ${employee.street}, ${employee.city}, ${employee.zip}</p>
                     <p><strong>Description:</strong> ${employee.description}</p>
-                    <p><strong>Employee notes:</strong> ${employee.employee_notes || ''}</p>
-                    <p><strong>Payment mode:</strong> ${employee.payment_type || ''}</p>
+                    <p><strong>Employee notes:</strong>  <textarea id="notes-${employee.ticket_id}" rows="3" class="form-control  textarea mt-2" placeholder="Add notes here..." style="background:transparent" >${employee.employee_notes || ""}</textarea></p>
+                    <p id="notes-field-${employee.ticket_id}"  style="color:red;display:none">Please fill the field</p>
+                    <p><strong>Payment Amount:</strong> <input type="number" id="payment-amount-${employee.ticket_id}" class="form-control mt-2 input-bottom-border  payment-input"  min="0" placeholder="Enter payment amount" style="background:transparent;border-radius: 0;" value="${employee.amount}"></p>
                     <p>
                         <strong><label for="is-paid-${employee.ticket_id}" style="margin-right: 10px;">Is Paid:</label></strong>
                         <input 
@@ -451,6 +459,18 @@ $(document).ready(function () {
                             ${employee.ispaid == 1 ? 'checked' : ''}
                         >
                     </p>
+                    
+                        <div class="mt-3" id="payment-mode-container-${employee.ticket_id}" >
+                            <label for="payment-mode-${employee.ticket_id}">Payment Mode:</label>
+<select id="payment-mode-${employee.ticket_id}" class="form-control mt-2 input-bottom-border" disabled style="background:transparent;border-radius: 0;">
+    <option value="" ${!employee.payment_type ? 'selected' : ''} disabled>Select Payment Mode</option>
+    <option value="cash" ${employee.payment_type === 'cash' ? 'selected' : ''}>Cash</option>
+    <option value="credit card" ${employee.payment_type === 'credit card' ? 'selected' : ''}>Credit Card</option>
+    <option value="debit card" ${employee.payment_type === 'debit card' ? 'selected' : ''}>Debit Card</option>
+    <option value="paypal" ${employee.payment_type === 'paypal' ? 'selected' : ''}>Paypal</option>
+    <option value="others" ${employee.payment_type === 'others' ? 'selected' : ''}>Others</option>
+</select>
+                
                     <div class="input-container mt-3">
                         <label for="start-time-${employee.ticket_id}">Work started time:</label>
                         <input 
@@ -458,8 +478,9 @@ $(document).ready(function () {
                             class="input-bottom-border" 
                             id="start-time-${employee.ticket_id}" 
                             value="${employee.work_started_time}" 
-                            disabled
+                            
                         >
+                        <p id="start-time-field-${employee.ticket_id}" style="color:red;display:none">Please fill the field</p>
                     </div>
                     <div class="input-container mt-3">
                         <label for="end-time-${employee.ticket_id}">Work ended time:</label>
@@ -468,15 +489,15 @@ $(document).ready(function () {
                             class="input-bottom-border" 
                             id="end-time-${employee.ticket_id}" 
                             value="${employee.work_ended_time}" 
-                            disabled
                         >
+                        <p id="end-time-field-${employee.ticket_id}"  style="color:red;display:none">Please fill the field</p>  
                     </div>
                     <div class="image-gallery row g-2 ">
                         ${generateImageInput(employee.ticket_id, employee.id, employee.photo_1, 1)}
                         ${generateImageInput(employee.ticket_id, employee.id, employee.photo_2, 2)}
                         ${generateImageInput(employee.ticket_id, employee.id, employee.photo_3, 3)}
                     </div>
-                    <div class="row">
+                    <div class="row mt-2">
                         <div class="col-6">
                             <button id="completed"
                                 class="form-control mt-2 employee-select completed-button" 
@@ -510,8 +531,20 @@ $(document).ready(function () {
     // Helper function to generate image input HTML
     function generateImageInput(ticketId, employeeId, photo, index) {
         return `
-               <div class="col-5 col-sm-4 col-md-3">
-                   <div class="uploads position-relative border">
+               <div class="col-4 col-sm-4 col-md-3 border" style="
+    
+    display: flex;
+    justify-content: center;
+   
+    align-items: center;
+    height: 61px;
+    width: 75px;
+    margin-right: 4px;
+
+
+
+">
+                   <div class="uploads position-relative ">
                 <input 
                     type="file" 
                     id="upload${index}-${ticketId}-${employeeId}" 
