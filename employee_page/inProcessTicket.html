@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inprocess Tickets</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <link rel="stylesheet" href="../css/nav.css">
+    <link rel="stylesheet" href="../css/table.css">
+    <link rel="stylesheet" href="../css/assignedTickets.css">
+    <link rel="stylesheet" href="../css/image.css">
+   
+    
+</head>
+<style>
+    .image-gallery .uploads {
+        background: none;
+        padding: 10px;
+    }
+    input::placeholder {
+    color: rgba(161, 158, 158, 0.779) !important; /* Adjust the color and opacity */
+     /* Optional: Add styling for better appearance */
+}
+
+.payment-input {
+    color: rgb(0, 0, 0) !important; /* Red text for entered values */
+}
+    .image-gallery .uploads span {
+        padding: 10px;
+        margin: none !important;
+    }
+
+    #image-preview-container img {
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    .buttonContainer {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+        gap: 50px;
+    }
+
+    .buttonContainer button {
+        width: 20%;
+        padding: 10px;
+
+    }
+
+    #completed {
+        background-color: #004102;
+        border: none;
+        border-radius: 10px;
+    }
+
+    .save {
+        border: 1px solid #004102;
+        background-color: transparent;
+        color: #004102;
+        border-radius: 0.375rem;
+        /* font-weight: bold; */
+    }
+
+    .input-container input {
+        margin: 8px;
+        background: none;
+        border: none;
+        border-bottom: 1px solid #ccc;
+    }
+
+
+    .comform {
+        color: white !important;
+        background-color: #004102 !important;
+    }
+
+    .cancel {
+        color: #004102 !important;
+        border: 1px solid #004102;
+    }
+
+    .image-set {
+        margin-left: 30px;
+        padding-left: 5px;
+    }
+
+
+    .input-wrapper {
+        display: flex;
+        align-items: center;
+        border-bottom: 1px solid #ccc;
+        padding: 8px 0;
+        margin-bottom: 12px;
+    }
+
+    .date-input {
+        border: none;
+        outline: none;
+        flex-grow: 1;
+        font-size: 16px;
+        color: #666;
+        background-color: transparent;
+    }
+
+    .date-input::placeholder {
+        color: #b0b0b0;
+    }
+
+    .icon-calendar {
+        font-size: 18px;
+        color: #004102;
+        margin-left: 8px;
+    }
+
+
+    .photo-container {
+        display: flex;
+        align-items: center;
+    }
+
+    .photo-grid {
+        display: flex;
+        gap: 10px;
+    }
+
+    .photo {
+        width: 80px;
+        height: 80px;
+         
+        border-radius: 4px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .add-photo {
+        display: flex;
+        align-items: center;
+        margin-left: 15px;
+        color: #666;
+        font-size: 16px;
+    }
+
+    .icon-attachment {
+        font-size: 16px;
+        color: #666;
+        margin-left: 8px;
+        cursor: pointer;
+    }
+
+    /* Hide the file input */
+    #file-input {
+        display: none;
+    }
+    @media (max-width:550px) {
+        #nav {
+            padding: 15px !important;
+        }
+    }
+
+    @media (max-width:450px) {
+        #nav {
+            padding: 10px !important;
+        }
+    }
+
+    @media (max-width:290px) {
+        .list-group-item {
+            font-size: 10px !important;
+        }
+
+        #left {
+            padding-top: 13%;
+        }
+    }
+</style>
+
+<body>
+
+    <div id="nav" class="mb-5">
+        <div class="container-fluid d-flex justify-content-between align-items-center">
+            <div class="col-4">
+                <img src="../icon/menu icon.png" alt="" class="sidebar-toggle img-fluid" id="sidebarToggle"
+                    style="width: 20%;">
+            </div>
+            <div class="col-4 text-center">
+                <img src="../images/logo.png" alt="Logo" id="logo" style="max-width: 100%;">
+            </div>
+            <div class="col-4 text-end">
+                <img src="../icon/bell.png" alt="Profile Icon" id="icon">
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="container">
+                <div class="row">
+                    <!-- Sidebar -->
+                    <div class="col-sm-12 col-xl-2 col-md-2 col-lg-2 col-sty" id="left">
+                        <div id="sidebar">
+                            <div id="sidebar-header" class="m-3 mb-5 mt-3">
+                                <img src="../images/logo.png" alt="Sidebar Logo" style="width: 100%;">
+                            </div>
+                            <div id="sidebar-content">
+                                <div class="list-group list-group-flush">
+
+                                    <a class="list-group-item list-group-item-action bg-purple dropdown-toggle" href="#"
+                                        id="ticketMenu" data-bs-toggle="collapse" data-bs-target="#ticketSubmenu"
+                                        aria-expanded="false" aria-controls="ticketSubmenu">
+                                        <img src="../icon/Mask group-3.png"><span>Ticket</span>
+                                    </a>
+                                    <div id="ticketSubmenu" class="collapse">
+                                        <ul class="list-group list-group-flush" id="list-group-flush">
+                                            <li class="list-group-item"><a href="AssignedTickets.html"
+                                                    class="bg-purple">Assigned Ticket</a></li>
+                                            <li class="list-group-item"><a href="inProcessTicket.html"
+                                                    class="bg-purple">InProgress Ticket</a></li>
+                                            <li class="list-group-item"><a href="completedTickets.html"
+                                                    class="bg-purple">Completed Ticket</a></li>
+                                        </ul>
+                                    </div>
+                                    <a href="employeeProfile.html"
+                                        class="list-group-item list-group-item-action bg-purple">
+                                        <img src="../icon/Mask group.png"><span>Profile</span>
+                                    </a>
+
+                                    <div style="position: fixed; bottom: 0; display: inline-flex;cursor: pointer;"
+                                        data-bs-toggle="modal" data-bs-target="#logoutModal" class="m-3">
+                                        <img src="../icon/Vector.png" style="width: 30px;margin-top: -5px;">
+                                        <span class="content text-white list-group-item">Logout</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End Sidebar -->
+                    <!-- Main Content -->
+                    <div class="col-sm-12 col-xl-10 col-md-10 col-lg-10 col-sty" id="fix">
+                        <p id="header" class="pb-4"
+                            style="box-shadow: 0px 10px 10px 0px rgba(0, 0, 0, 0.5); margin-left: -12px; padding: 20px; margin-right: -12px; font-weight: bold;">
+                            <span id="e_name"></span> <span class="span"><span id="CName"></span> <img
+                                    src="../icon/Mask group (2).png" id="Clogo" alt="" style="width: 40px;"></span>
+                        </p>
+
+                        <div class="container container-sty">
+                            <h1 class="text-center m-3 mt-5 fw-bold" style="color: #004102;">InProgress Tickets</h1>
+                            <div class="container-fluid mt-5 d-none d-md-table" id="table">
+                                <div id="whole-table">
+                                    <!-- Table -->
+                                    <table id="ticketTable" class="table table-striped table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th>Ticket ID</th>
+                                                <th>Issue Type</th>
+                                                <th>Customer Name</th>
+                                                <th>Phone</th>
+                                                <th>Date</th>
+                                                <th>City</th>
+
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div id="card-container" class="d-md-none d-block card-view"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content custom-modal-content">
+
+                <!-- Modal Header with Title -->
+                <div class="modal-header justify-content-center">
+                    <h5 class="modal-title" id="logoutModalLabel">Logout</h5>
+
+                </div>
+
+                <!-- Modal Body -->
+                <div class="modal-body custom-modal-body">
+                    Are you sure you want to log out?
+                </div>
+
+                <!-- Modal Footer -->
+                <div class="modal-footer custom-modal-footer">
+                    <button type="button" class="btn-yes">Yes</button>
+                    <button type="button" class="btn-no" data-bs-dismiss="modal">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="loading" id="l">
+        <div class="spinner"></div>
+    </div>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Bootstrap Bundle JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- DataTables JS -->
+    <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap5.min.js"></script>
+    
+    <script>
+        document.querySelector('.btn-yes').addEventListener('click', function () {
+            localStorage.clear();
+            window.location.href = '../index.html';
+        });
+
+        document.getElementById('sidebarToggle').addEventListener('click', function () {
+            var sidebar = document.getElementById('left');
+            var body = document.body;
+            var mainContents = document.querySelectorAll(".card");
+            var content = document.querySelector(".container-sty");
+            var tableOddRows = document.querySelectorAll("tr");
+            var tableEvenRows = document.querySelectorAll("tr.even");
+            var issueType = document.querySelectorAll(".issue-type");
+            var tHead = document.querySelector("thead");
+            var tHeadCells = document.querySelectorAll("thead th");
+
+            sidebar.classList.toggle('active');
+
+            if (sidebar.classList.contains('active')) {
+                // Sidebar is open, apply transparency
+                body.classList.add('no-scroll');
+                body.classList.add('body-overlay');
+
+                content.style.backgroundColor = "transparent";
+                mainContents.forEach(function (mainContent) {
+                    mainContent.style.backgroundColor = "transparent";
+                });
+                tableOddRows.forEach(function (row) {
+                    row.style.cssText = "background-color: transparent !important;"; // Adds !important
+                });
+
+                if (tHead) {
+                    tHead.style.cssText = "background-color: transparent !important;";
+                }
+
+                // Apply transparency to each table head cell
+                tHeadCells.forEach(function (cell) {
+                    cell.style.cssText = "background-color: transparent !important;";
+                });
+
+                issueType.forEach(function (row) {
+                    row.style.cssText = "background-color: transparent !important;"; // Adds !important
+                });
+            } else {
+                // Sidebar is closed, reset colors
+                body.classList.remove('no-scroll');
+                body.classList.remove('body-overlay');
+
+                content.style.backgroundColor = "";
+                mainContents.forEach(function (mainContent) {
+                    mainContent.style.backgroundColor = "";
+                });
+
+                tableOddRows.forEach(function (row) {
+                    row.style.backgroundColor = ""; // Reset odd row background
+                });
+
+                tableEvenRows.forEach(function (row) {
+                    row.style.backgroundColor = ""; // Reset even row background
+                });
+
+                if (tHead) {
+                    tHead.style.backgroundColor = ""; // Reset thead background
+                }
+
+                // Reset the background of each table head cell
+                tHeadCells.forEach(function (cell) {
+                    cell.style.backgroundColor = ""; // Reset th background
+                });
+            }
+        });
+    </script>
+    <!-- Code injected by live-server -->
+    <script>
+        // <![CDATA[  <-- For SVG support
+        if ('WebSocket' in window) {
+            (function () {
+                function refreshCSS() {
+                    var sheets = [].slice.call(document.getElementsByTagName("link"));
+                    var head = document.getElementsByTagName("head")[0];
+                    for (var i = 0; i < sheets.length; ++i) {
+                        var elem = sheets[i];
+                        var parent = elem.parentElement || head;
+                        parent.removeChild(elem);
+                        var rel = elem.rel;
+                        if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+                            var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+                            elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+                        }
+                        parent.appendChild(elem);
+                    }
+                }
+                var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+                var address = protocol + window.location.host + window.location.pathname + '/ws';
+                var socket = new WebSocket(address);
+                socket.onmessage = function (msg) {
+                    if (msg.data == 'reload') window.location.reload();
+                    else if (msg.data == 'refreshcss') refreshCSS();
+                };
+                if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+                   //  console.log('Live reload enabled.');
+                    sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+                }
+            })();
+        }
+        else {
+            console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+        }
+    </script>
+     <script defer src="script/inprocess.js"></script>
+    <script src="../script/navbar.js"></script>
+</body>
+
+</html>

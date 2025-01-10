@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap JS and Popper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.min.js"></script>
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../css/nav.css">
+    <link rel="stylesheet" href="./companiesCss/register.css">
+    <link rel="stylesheet" href="../css/image.css">
+</head>
+<style>
+    /* Loading Overlay Style */
+    .loading-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        /* Semi-transparent background */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+        /* To make sure it appears above everything */
+    }
+
+    /* Apply background blur to the main content when loading is active */
+    .blur-background {
+        filter: blur(5px);
+    }
+
+    /* Center spinner */
+    .spinner-border {
+        width: 3rem;
+        height: 3rem;
+        border-width: 0.3rem;
+    }
+
+    @media (max-width:450px) {
+        #submit-btn {
+            padding-top: 10px;
+            padding-bottom: 10px;
+            font-size: 12px;
+        }
+
+        .form-control {
+            font-size: 12px;
+        }
+
+        input::placeholder {
+            font-size: 13px;
+        }
+
+        .container-sty h2 {
+            font-size: 19px;
+        }
+
+        .inline-fields {
+            display: block;
+        }
+    }
+
+    @media (max-width:320px) {
+        .container-sty h2 {
+            font-size: 16px;
+        }
+
+    }
+
+    .error-message {
+        color: red;
+    }
+</style>
+
+<body>
+    <!-- Your existing HTML content -->
+    <div id="nav" class="mb-5">
+        <div class="container-fluid d-flex justify-content-between align-items-center">
+            <div class="col-4">
+                <img src="../images/icons8-menu-bar-64.png" alt="" class="sidebar-toggle img-fluid" id="sidebarToggle"
+                    style="width: 20%;">
+            </div>
+            <div class="col-4 text-center">
+                <img src="../images/logo.png" alt="Logo" id="logo" style="max-width: 100%;">
+            </div>
+            <div class="col-4 text-end">
+                <img src="../icon/bell.png" alt="Profile Icon" id="icon" style="max-width: 100%;">
+            </div>
+        </div>
+    </div>
+
+
+    <div class="container-fluid" id="mainContent">
+        <div class="row">
+            <div class="container">
+                <div class="row">
+                    <!-- Sidebar -->
+                    <div class="col-sm-12 col-xl-2 col-md-2 col-lg-2 col-sty" id="left">
+                        <!-- Sidebar -->
+                        <div id="sidebar">
+                            <div id="sidebar-header" class="m-3 mb-5 mt-3">
+                                <img src="../images/logo.png" alt="Sidebar Logo" style="width: 100%;">
+                            </div>
+                            <div id="sidebar-content">
+                                <div class="list-group list-group-flush">
+                                    <a href="dashboard.html"
+                                        class="list-group-item list-group-item-action bg-purple"><img
+                                            src="../icon/Mask group-2.png" style="width: 25px;margin-top: -5px;"><span
+                                            style="padding-left: 10px;color: white;">Dashboard</span></a>
+
+                                    <a href="register.html"
+                                        class="list-group-item list-group-item-action bg-purple"><img
+                                            src="../icon/Mask group.png" style="width: 30px;margin-top: -5px;"><span
+                                            style="padding-left: 10px;color: white;">Register</span></a>
+                                    <a href="company.html" class="list-group-item list-group-item-action bg-purple"><img
+                                            src="../icon/Mask group-1.png" style="width: 30px;margin-top: -5px;"><span
+                                            style="padding-left: 10px;color: white;">Companies</span></a>
+
+                                    <div style="position: fixed; bottom: 0; display: inline-flex;cursor: pointer;"
+                                        class="m-3" data-bs-toggle="modal" data-bs-target="#logoutModal">
+                                        <img src="../icon/Vector.png" style="width: 30px;margin-top: -5px;">
+                                        <span class="content text-white list-group-item" data-bs-toggle="modal"
+                                            data-bs-target="#logoutModal">Logout</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Main Content -->
+                    <div class="col-sm-12 col-xl-10 col-md-12 col-lg-10 col-sty" id="fix">
+                        <div class="container container-sty text-center">
+                            <h2 class="text-center m-3 fw-bold"> COMPANY REGISTRATION </h2>
+                            <div class="container-form">
+                                <form id="registerForm" novalidate>
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" id="companyName"
+                                            placeholder="Company Name*" required>
+                                        <small class="error-message" id="companyNameError"></small>
+                                    </div>
+
+                                    <div class="inline-fields">
+                                        <div class="form-group">
+                                            <input type="text" class="form-control" id="firstName"
+                                                placeholder="First Name*" required>
+                                            <small class="error-message" id="firstNameError"></small>
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="text" class="form-control" id="lastName"
+                                                placeholder="Last Name*" required>
+                                            <small class="error-message" id="lastNameError"></small>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <input type="email" class="form-control" id="email" placeholder="Email*"
+                                            required>
+                                        <small class="error-message" id="emailError"></small>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <input type="tel" class="form-control" id="phone" placeholder="Phone Number*"
+                                            required>
+                                        <small class="error-message" id="phoneError"></small>
+                                    </div>
+
+                                    <div class="submit-btn-container">
+                                        <button type="submit" class="submit-btn" id="submit-btn">Submit</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="loadingOverlay" class="loading-overlay d-none">
+        <div class="spinner-border text-light" role="status">
+            <span class="sr-only"></span>
+        </div>
+    </div>
+
+    <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content custom-modal-content">
+                <div class="modal-header justify-content-center">
+                    <h5 class="modal-title" id="successModalLabel" style="color: white;">Success</h5>
+                </div>
+                <div class="modal-body custom-modal-body">
+                    <p>Your account has been created</p>
+                    <div class="checkmark-container">
+                        <svg viewBox="0 0 26 26" xmlns="http://www.w3.org/2000/svg">
+                            <g stroke="currentColor" stroke-width="2" fill="none" fill-rule="evenodd"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path class="circle"
+                                    d="M13 1C6.372583 1 1 6.372583 1 13s5.372583 12 12 12 12-5.372583 12-12S19.627417 1 13 1z" />
+                                <path class="tick" d="M6.5 13.5L10 17l8.808621-8.308621" />
+                            </g>
+                        </svg>
+                    </div>
+                </div>
+                <div class="modal-footer custom-modal-footer">
+                    <button type="button" class="btn btn-success" style="width: 100%;" data-bs-dismiss="modal"
+                        id="success-modal-ok">Ok</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Failure Modal -->
+    <div class="modal fade" id="failureModal" tabindex="-1" aria-labelledby="failureModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content custom-modal-content">
+                <div class="modal-header justify-content-center">
+                    <h3 style="color: white;">Failure!</h3>
+
+                </div>
+                <div class="modal-body custom-modal-body">
+                    <p id="failure-content">An error occurred while register the company!</p>
+                    <div class="checkmark-container">
+                        <svg class="cross__svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+                            <circle class="cross__circle" cx="26" cy="26" r="25" fill="none" />
+                            <path class="cross__path cross__path--right" fill="none" d="M16,16 l20,20" />
+                            <path class="cross__path cross__path--left" fill="none" d="M16,36 l20,-20" />
+                        </svg>
+                    </div>
+                </div>
+                <div class="modal-footer custom-modal-footer">
+                    <button type="button" class="btn btn-danger" style="width: 100%;"
+                        data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="loading" id="l">
+        <div class="spinner"></div>
+    </div>
+
+
+    <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content custom-modal-content">
+
+                <!-- Modal Header with Title -->
+                <div class="modal-header justify-content-center">
+                    <h5 class="modal-title" id="logoutModalLabel">Logout</h5>
+
+                </div>
+
+                <!-- Modal Body -->
+                <div class="modal-body custom-modal-body">
+                    Are you sure you want to log out?
+                </div>
+
+                <!-- Modal Footer -->
+                <div class="modal-footer custom-modal-footer">
+                    <button type="button" class="btn-yes">Yes</button>
+                    <button type="button" class="btn-no" data-bs-dismiss="modal">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.querySelector('.btn-yes').addEventListener('click', function () {
+            localStorage.clear();
+            window.location.href = '../index.html';
+        });
+
+        // Function to capitalize words
+        function capitalizeWords(str) {
+            return str.replace(/\b\w/g, char => char.toUpperCase());
+        }
+
+        const successModal = new bootstrap.Modal(document.getElementById('successModal'));
+        const failureModal = new bootstrap.Modal(document.getElementById('failureModal'));
+
+        // Add event listener for the Submit button
+        document.getElementById('submit-btn').addEventListener('click', function (event) {
+            event.preventDefault();
+
+            let company_name = capitalizeWords(document.getElementById('companyName').value)
+            let phone_number = document.getElementById('phone').value.toString()
+            let first_name = capitalizeWords(document.getElementById('firstName').value)
+            let last_name = capitalizeWords(document.getElementById('lastName').value)
+            let email = document.getElementById('email').value.toLowerCase()
+
+            if (!validateForm()) {
+                return false
+            }
+
+            const mainContent = document.getElementById('mainContent');
+            const loadingIndicator = document.getElementById('l'); // Adjust this ID as necessary
+            const popupModal = document.getElementById('popupModal');
+            const popupModalFailure = document.getElementById('popupModalFailure');
+            const closePopup = document.getElementById('closePopup');
+            const closePopupFailure = document.getElementById('closePopupFailure');
+
+            // Gather input values
+            const data = {
+                company_name: company_name,
+                phone_number: phone_number,
+                first_name: first_name,
+                last_name: last_name,
+                email: email
+            };
+
+            // Blur content and show loading indicator
+            // mainContent.classList.add('blur-background');
+            loadingIndicator.style.display = 'flex';
+
+            // Fetch data from the API
+            fetch("https://m4j8v747jb.execute-api.us-west-2.amazonaws.com/dev//company_register/create", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+                .then(response => {
+                    // Hide loading indicator
+                    loadingIndicator.style.display = 'none';
+
+                    if (!response.ok) {
+                        throw new Error(`Error: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.error) {
+                        failureModal.show();
+                        reset()
+                    } else {
+                        successModal.show();
+                        reset()
+                    }
+                })
+                .catch(error => {
+                    loadingIndicator.style.display = 'none';
+                    reset()
+                    console.error('Error:', error);
+                });
+        });
+
+        document.getElementById('sidebarToggle').addEventListener('click', function () {
+            var sidebar = document.getElementById('left');
+            sidebar.classList.toggle('active');
+        });
+
+        function reset() {
+            document.getElementById('companyName').value = ""
+            document.getElementById('phone').value = ""
+            document.getElementById('firstName').value = ""
+            document.getElementById('lastName').value = ""
+            document.getElementById('email').value = ""
+        }
+
+
+        function validateForm() {
+            let isValid = true;
+
+            // Clear previous error messages
+            document.querySelectorAll(".error-message").forEach(el => el.textContent = "");
+
+            // Company Name validation
+            const companyName = document.getElementById("companyName");
+            const companyNameError = document.getElementById("companyNameError");
+            if (!companyName.value.trim()) {
+                companyNameError.textContent = "Company Name is required.";
+                isValid = false;
+            }
+
+            // First Name validation
+            const firstName = document.getElementById("firstName");
+            const firstNameError = document.getElementById("firstNameError");
+            if (!firstName.value.trim()) {
+                firstNameError.textContent = "First Name is required.";
+                isValid = false;
+            }
+
+            // Last Name validation
+            const lastName = document.getElementById("lastName");
+            const lastNameError = document.getElementById("lastNameError");
+            if (!lastName.value.trim()) {
+                lastNameError.textContent = "Last Name is required.";
+                isValid = false;
+            }
+
+            // Email validation
+            const email = document.getElementById("email");
+            const emailError = document.getElementById("emailError");
+            const emailPattern = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
+            if (!email.value.trim()) {
+                emailError.textContent = "Email is required.";
+                isValid = false;
+            } else if (!emailPattern.test(email.value.trim())) {
+                emailError.textContent = "Enter a valid email address.";
+                isValid = false;
+            }
+
+            // Phone validation
+            const phone = document.getElementById("phone");
+            const phoneError = document.getElementById("phoneError");
+            if (!phone.value.trim()) {
+                phoneError.textContent = "Phone Number is required.";
+                isValid = false;
+            }
+
+            return isValid;
+        }
+
+
+        // Real-time validation to clear error messages
+        function addRealTimeValidation() {
+            const fields = [
+                { id: "companyName", errorId: "companyNameError" },
+                { id: "firstName", errorId: "firstNameError" },
+                { id: "lastName", errorId: "lastNameError" },
+                { id: "email", errorId: "emailError", pattern: /^[^@\s]+@[^@\s]+\.[^@\s]+$/ },
+                { id: "phone", errorId: "phoneError" }
+            ];
+
+            fields.forEach(field => {
+                const input = document.getElementById(field.id);
+                const errorElement = document.getElementById(field.errorId);
+
+                input.addEventListener("input", () => {
+                    if (input.value.trim() && (!field.pattern || field.pattern.test(input.value.trim()))) {
+                        errorElement.textContent = ""; // Clear the error message if valid
+                    }
+                });
+            });
+        }
+        addRealTimeValidation();
+
+
+    </script>
+    <script src="../script/navbar.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

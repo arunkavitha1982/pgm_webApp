@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Employee Ticket</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/dataTables.bootstrap5.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="css/nav.css">
+    <link rel="stylesheet" href="css/employee_ticket.css">
+    <link rel="stylesheet" href="css/image.css">
+    <link rel="stylesheet" href="css/table.css">
+</head>
+
+<style>
+    #rejectedTicketTable tbody td .issue-type.AC,
+    #unassignedTicketTable tbody td .issue-type.AC,
+    #ticketTable tbody td .issue-type.AC {
+        display: flex;
+        align-items: center;
+        border-radius: 10px;
+        background-color: #f6eec9;
+    }
+
+    #rejectedTicketTable td .issue-type.Refrigerator,
+    #unassignedTicketTable td .issue-type.Refrigerator,
+    #ticketTable td .issue-type.Refrigerator {
+        background-color: #caedf8;
+        display: flex;
+        align-items: center;
+        border-radius: 10px;
+    }
+
+    #rc {
+        display: none;
+    }
+
+
+
+
+    /* General modal styles */
+    .custom-modal-content {
+        border-radius: 8px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        border: none;
+    }
+
+    .custom-modal-body {
+        text-align: center;
+        font-size: 1.2rem;
+        font-weight: bold;
+        padding: 20px;
+        color: #333;
+    }
+
+    .custom-modal-footer {
+        padding: 15px;
+        text-align: center;
+    }
+
+    /* Checkmark Animation */
+    .checkmark-container {
+        position: relative;
+        width: 80px;
+        height: 80px;
+        margin: 20px auto;
+    }
+
+    .checkmark-container svg {
+        width: 100%;
+        height: 100%;
+    }
+
+    .tick {
+        stroke-dasharray: 18;
+        stroke-dashoffset: 18;
+        stroke: #4CAF50;
+        animation: tick-draw 0.6s ease forwards;
+    }
+
+    .circle {
+        stroke-dasharray: 76;
+        stroke-dashoffset: 76;
+        stroke: #4CAF50;
+        fill: none;
+        animation: circle-draw 0.6s ease-in-out forwards;
+    }
+
+    @keyframes circle-draw {
+        to {
+            stroke-dashoffset: 0;
+        }
+    }
+
+    @keyframes tick-draw {
+        to {
+            stroke-dashoffset: 0;
+        }
+    }
+
+    /* Cross Animation */
+    .cross__svg {
+        width: 80px;
+        height: 80px;
+        stroke-width: 3;
+        margin: 20px auto;
+    }
+
+    .cross__circle {
+        stroke: #e55454;
+        stroke-dasharray: 166;
+        stroke-dashoffset: 166;
+        animation: cross-circle-draw 0.6s ease forwards;
+    }
+
+    .cross__path {
+        stroke: #e55454;
+        stroke-dasharray: 48;
+        stroke-dashoffset: 48;
+        animation: cross-path-draw 0.3s ease-in-out forwards;
+    }
+
+    .cross__path--right {
+        animation-delay: 0.3s;
+    }
+
+    .cross__path--left {
+        animation-delay: 0.6s;
+    }
+
+    @keyframes cross-circle-draw {
+        to {
+            stroke-dashoffset: 0;
+        }
+    }
+
+    @keyframes cross-path-draw {
+        to {
+            stroke-dashoffset: 0;
+        }
+    }
+
+    /* Button Hover Effects */
+    .btn-success:hover {
+        background-color: #3e8e41;
+        border-color: #3e8e41;
+    }
+
+    .btn-danger:hover {
+        background-color: #c0392b;
+        border-color: #c0392b;
+    }
+
+    /* Input Focus Style */
+    .form-control:focus {
+        border-color: #4CAF50;
+        outline: none;
+        box-shadow: 0 0 5px rgba(76, 175, 80, 0.6);
+    }
+
+    .error-text {
+        color: red;
+    }
+</style>
+
+
+<body>
+    <div id="nav" class="mb-5">
+        <div class="container-fluid d-flex justify-content-between align-items-center">
+            <div class="col-4">
+                <img src="icon/menu icon.png" alt="" class="sidebar-toggle img-fluid" id="sidebarToggle"
+                    style="width: 20%;">
+            </div>
+            <div class="col-4 text-center">
+                <img src="images/logo.png" alt="Logo" id="logo" style="max-width: 100%;">
+            </div>
+            <div class="col-4 text-end">
+                <img src="icon/bell.png" alt="Profile Icon" id="icon">
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="container">
+                <div class="row">
+                    <!-- Sidebar -->
+                    <div class="col-sm-12 col-xl-2 col-md-2 col-lg-2 col-sty" id="left">
+                        <!-- Sidebar -->
+                        <div id="sidebar">
+                            <div id="sidebar-header" class="m-3 mb-5 mt-3">
+                                <img src="images/logo.png" alt="Sidebar Logo" style="width: 100%;">
+                            </div>
+                            <div id="sidebar-content">
+                                <div class="list-group list-group-flush">
+                                    <a href="dashboard.html"
+                                        class="list-group-item list-group-item-action bg-purple"><img
+                                            src="icon/Mask group-2.png" style="width: 25px;margin-top: -5px;"><span
+                                            style="padding-left: 10px;color: white;">Dashboard</span></a>
+                                    <a class="list-group-item list-group-item-action bg-purple dropdown-toggle" href="#"
+                                        id="ticketMenu" data-bs-toggle="collapse" data-bs-target="#ticketSubmenu"
+                                        aria-expanded="false" aria-controls="ticketSubmenu">
+                                        <img src="icon/Mask group-3.png" style="width: 25px;margin-top: -5px;">
+                                        <span style="padding-left: 10px;color: white;">Ticket</span>
+                                    </a>
+
+                                    <div id="ticketSubmenu" class="collapse">
+                                        <ul class="list-group list-group-flush" id="list-group-flush">
+                                            <li class="list-group-item"><a href="Unassigned.html">Unassigned Tickets</a>
+                                            </li>
+                                            <li class="list-group-item"><a href="In-Progress.html"
+                                                    class=" bg-purple">In-Progress</a></li>
+                                            <li class="list-group-item"><a href="invoice.html"
+                                                    class=" bg-purple">ReadyForInvoice</a></li>
+                                            <li class="list-group-item"><a href="completed.html">Completed Ticket</a>
+                                            </li>
+                                            <li class="list-group-item"><a href="RejectedTicket.html">RejectedTicket</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <a href="employee_ticket.html"
+                                        class="list-group-item list-group-item-action bg-purple"><img
+                                            src="icon/Mask group.png" style="width: 30px;margin-top: -5px;"><span
+                                            style="padding-left: 10px;color: white;">Employees</span></a>
+                                    <a href="home-profile.html"
+                                        class="list-group-item list-group-item-action bg-purple"><img
+                                            src="icon/Mask group-1.png" style="width: 30px;margin-top: -5px;"><span
+                                            style="padding-left: 10px;color: white;">Profile</span></a>
+                                    <div style="position: fixed; bottom: 0; display: inline-flex;cursor: pointer;"
+                                        data-bs-toggle="modal" data-bs-target="#logoutModal" class="m-3">
+                                        <img src="icon/Vector.png" style="width: 30px;margin-top: -5px;">
+                                        <span class="content text-white list-group-item">Logout</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Main Content -->
+                    <div class="col-sm-12 col-xl-10 col-md-10 col-lg-10 col-sty" id="fix">
+                        <p id="header" class="pb-4"
+                            style="box-shadow: 0px 10px 10px 0px rgba(0, 0, 0, 0.5); margin-left: -12px; padding: 20px; margin-right: -12px; font-weight: bold;">
+                            Admin <span class="span"><span id="CName"></span> <img src="icon/Mask group (2).png"
+                                    id="Clogo" alt="" style="width: 40px;"></span>
+                        </p>
+
+                        <div class="container container-sty">
+                            <h1 class="text-center m-3 mt-5 fw-bold">Employee Management</h1>
+
+                            <div class="container-fluid center-container">
+                                <div class="row">
+                                    <div class="col-md-3 text-center">
+                                        <input type="text" class="input-bottom-border mt-4" placeholder="First Name"
+                                            oninput="remove(1)" required>
+                                        <div class="error-text" style="display: none;" id="firstnameerr">Please fill the
+                                            field</div>
+                                        <input type="text" class="input-bottom-border mt-4" placeholder="Last Name"
+                                            oninput="remove(2)" required>
+                                        <div class="error-text" style="display: none;" id="lastnameerr">Please fill the
+                                            field</div>
+                                    </div>
+                                    <div class="col-md-3 text-center">
+                                        <input type="text" class="input-bottom-border mt-4" placeholder="Email"
+                                            oninput="remove(3)" required>
+                                        <div class="error-text" style="display: none;" id="emailerr">Please fill the
+                                            field</div>
+                                        <input type="text" class="input-bottom-border mt-4" placeholder="Phone Number"
+                                            required oninput="remove(4)">
+                                        <div class="error-text" style="display: none;" id="phoneNumberError">Please fill
+                                            the field</div>
+                                    </div>
+                                    <div class="col-md-3 text-center">
+                                        <input type="text" class="input-bottom-border mt-4" oninput="remove(5)"
+                                            placeholder="Assigned Location" required>
+                                        <div class="error-text" style="display: none;" id="locationerr">Please fill the
+                                            field</div>
+                                            
+
+                                        <div class="dropdown">
+                                            <button id="dropdownButton" class="input-bottom-border mt-4"
+                                                onclick="toggleDropdown(event)">Specialization</button>
+                                            <div class="dropdown-options input-bottom-border" id="dropdownOptions"
+                                                onclick="event.stopPropagation()">
+                                                <label><input type="checkbox" value="AC" onchange="updateButton(this)">
+
+                                                    AC</label>
+                                                <label><input type="checkbox" value="Refrigerator"
+                                                        onchange="updateButton(this)"> Refrigerator </label>
+
+                                            </div>
+
+                                        </div>
+                                        <p class="error-text" style="display: none;" id="specializationFeedback">Please fill the
+                                            field</p>
+
+                                    </div>
+
+
+                                    <div class="col-md-3 pt-3" id="buttons" style="float: right;">
+
+                                        <button type="submit" class="mt-4 login-button" id="cancel"
+                                            onclick="cancel()">Cancel</button>
+                                        <button type="submit" class="mt-4 login-button" id="addEmployee"
+                                            style="display: none;" id="addEmployee"
+                                            onclick="createEmployee();validateForm()">Add
+                                            employee</button>
+                                        <button type="submit" class="mt-4 login-button" id="addEmployee2"
+                                            onclick="show()">Add employee</button>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <!-- Table -->
+                            <div class="container-fluid mt-5  mb-5 justify-content-center" id="card">
+                                <div id="table" class="d-none d-md-table">
+                                    <table id="ticketTable" class="table table-striped table-hover">
+                                        <thead>
+                                            <tr>
+                                                <!-- <th></th> -->
+                                                <th>Employee Name</th>
+                                                <th>Phone</th>
+                                                <th>Specialization</th>
+                                                <th>Email</th>
+                                                <th>Location</th>
+                                                <th>Completed Work</th>
+                                                <th>Pending Work</th>
+                                                <th>Remove</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tBody"></tbody>
+                                    </table>
+                                </div>
+
+                                <div id="card-container" class="d-md-none d-block card-view"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="loading" id="l">
+        <div class="spinner"></div>
+    </div>
+
+
+
+    <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content custom-modal-content">
+                <div class="modal-header justify-content-center">
+                    <h5 class="modal-title" id="logoutModalLabel">Logout</h5>
+                </div>
+                <div class="modal-body custom-modal-body">
+                    Are you sure you want to log out?
+                </div>
+                <div class="modal-footer custom-modal-footer">
+                    <button type="button" class="btn-yes ">Yes</button>
+                    <button type="button" class="btn-no " data-bs-dismiss="modal">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content custom-modal-content">
+                <div class="modal-header justify-content-center">
+                    <h5 class="modal-title" id="deleteModalLabel">Delete</h5>
+                </div>
+                <div class="modal-body custom-modal-body">
+                    Are you sure you want to delete the employee?
+                </div>
+                <div class="modal-footer custom-modal-footer">
+                    <button type="button" class="btn-yes">Yes</button>
+                    <button type="button" class="btn-no" data-bs-dismiss="modal">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Success Modal -->
+    <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content custom-modal-content">
+                <div class="modal-header justify-content-center">
+                    <h5 class="modal-title" id="successModalLabel">Success</h5>
+                </div>
+                <div class="modal-body custom-modal-body">
+                    <p id="success_content">Employee added successfully!</p>
+                    <div class="checkmark-container">
+                        <svg viewBox="0 0 26 26" xmlns="http://www.w3.org/2000/svg">
+                            <g stroke="currentColor" stroke-width="2" fill="none" fill-rule="evenodd"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path class="circle"
+                                    d="M13 1C6.372583 1 1 6.372583 1 13s5.372583 12 12 12 12-5.372583 12-12S19.627417 1 13 1z" />
+                                <path class="tick" d="M6.5 13.5L10 17l8.808621-8.308621" />
+                            </g>
+                        </svg>
+                    </div>
+                </div>
+                <div class="modal-footer custom-modal-footer">
+                    <button type="button" class="btn btn-success" style="width: 100%;" data-bs-dismiss="modal"
+                        id="success-modal-ok">Ok</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Failure Modal -->
+    <div class="modal fade" id="failureModal" tabindex="-1" aria-labelledby="failureModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content custom-modal-content">
+                <div class="modal-header justify-content-center">
+                    <h5 class="modal-title" id="failureModalLabel">Failure</h5>
+                </div>
+                <div class="modal-body custom-modal-body">
+                    <p id="failure-content">An error occurred while adding the employee!</p>
+                    <div class="checkmark-container">
+                        <svg class="cross__svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+                            <circle class="cross__circle" cx="26" cy="26" r="25" fill="none" />
+                            <path class="cross__path cross__path--right" fill="none" d="M16,16 l20,20" />
+                            <path class="cross__path cross__path--left" fill="none" d="M16,36 l20,-20" />
+                        </svg>
+                    </div>
+                </div>
+                <div class="modal-footer custom-modal-footer">
+                    <button type="button" class="btn btn-danger" style="width: 100%;" data-bs-dismiss="modal"
+                        id="failed_ok_button">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Bootstrap Bundle JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- DataTables JS -->
+    <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap5.min.js"></script>
+
+    <script src="script/employee_ticket.js"></script>
+    <script>
+        document.querySelector('.btn-yes').addEventListener('click', function () {
+            localStorage.clear();
+            window.location.href = 'index.html';
+        });
+        const CName = localStorage.getItem("CName")
+
+
+        document.getElementById("CName").innerHTML = CName;
+
+        function remove(num) {
+            const firstnameerr = document.getElementById('firstnameerr');
+            const lastnameerr = document.getElementById('lastnameerr');
+            const phoneNumberError = document.getElementById('phoneNumberError');
+            const emailerr = document.getElementById('emailerr');
+            const locationerr = document.getElementById('locationerr');
+
+              
+        switch (num) {
+            case 1: firstnameerr.style.display = 'none';
+                
+                break;
+                case 2: lastnameerr.style.display = 'none';
+                
+                break;
+                case 3:   emailerr.style.display = 'none';
+                
+                break;
+                case 4: phoneNumberError.style.display = 'none';
+                
+                break;
+                case 5:  locationerr.style.display = 'none';
+
+                
+                break;
+        
+            default:
+                break;
+        }
+           
+
+        }
+
+
+        function validateForm() {
+            const inputs = document.querySelectorAll('.input-bottom-border');
+            let isValid = true;
+
+            inputs.forEach(input => {
+                const errorText = input.nextElementSibling;
+
+                if (input.value.trim() === '') {
+                    isValid = false;
+                    errorText.style.display = 'block';
+                } else {
+                    errorText.style.display = 'none';
+                }
+            });
+
+            const specializationOptions = document.querySelectorAll('.dropdown-options input[type="checkbox"]');
+            const specializationFeedback = document.getElementById('specializationFeedback');
+            const specializationSelected = Array.from(specializationOptions).some(option => option.checked);
+
+            if (!specializationSelected) {
+                isValid = false;
+                specializationFeedback.style.display = 'block';
+            } else {
+                specializationFeedback.style.display = 'none';
+            }
+
+            return isValid;
+        }
+    </script>
+
+    <script src="script/navbar.js"></script>
+
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+
+</html>

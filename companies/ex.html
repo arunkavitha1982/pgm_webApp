@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Row and Email Send</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        .icon { cursor: pointer; }
+        button.send-email { background-color: #007bff; color: white; border: none; padding: 5px 10px; cursor: pointer; }
+        button.send-email:disabled { background-color: gray; cursor: not-allowed; }
+    </style>
+</head>
+<body>
+    <table border="1" id="employeesTable">
+        <thead>
+            <tr>
+                <th>Company</th>
+                <th>Name</th>
+                <th>Phone</th>
+                <th>Email</th>
+                <th>Action</th>
+                <th>Email Send</th>
+            </tr>
+        </thead>
+        <tbody id="tableBody">
+            <!-- Dynamic Rows -->
+        </tbody>
+    </table>
+
+    <script>
+        // Sample Data
+        const employeesData = [
+            { company_name: "TechCorp", first_name: "Alice", phone_number: "123-456-7890", email: "alice@techcorp.com" },
+            { company_name: "BizSolutions", first_name: "Bob", phone_number: "987-654-3210", email: "bob@bizsolutions.com" },
+        ];
+
+        // Populate Table
+        employeesData.forEach(element => {
+            const newRow = document.createElement('tr');
+            newRow.innerHTML = `
+                <td>${element.company_name}</td>
+                <td>${element.first_name}</td>
+                <td>${element.phone_number}</td>
+                <td>${element.email}</td>
+                <td>
+                    <span class="icon edit-icon" title="Edit">
+                        <i class="fas fa-pencil-alt"></i>
+                    </span>
+                </td>
+                <td>
+                    <button class="send-email" data-email="${element.email}">Send Email</button>
+                </td>
+            `;
+            document.querySelector('#tableBody').appendChild(newRow);
+        });
+
+        // Edit Row Functionality
+        document.querySelectorAll('.edit-icon').forEach(icon => {
+            icon.addEventListener('click', function() {
+                const row = this.closest('tr');
+                const cells = row.querySelectorAll('td'); // Select all cells
+
+                // Edit only the first four columns (Company, Name, Phone, Email)
+                for (let i = 0; i < 4; i++) {
+                    const cell = cells[i];
+                    if (this.dataset.editing === "true") {
+                        // Save Mode: Save values from input fields
+                        const input = cell.querySelector('input');
+                        if (input) {
+                            cell.textContent = input.value; // Set cell text to input value
+                        }
+                    } else {
+                        // Edit Mode: Replace cell text with input fields
+                        const text = cell.textContent;
+                        cell.textContent = ''; // Clear cell content
+                        const input = document.createElement('input');
+                        input.type = 'text';
+                        input.value = text; // Set input value to cell's original text
+                        cell.appendChild(input); // Add input to cell
+                    }
+                }
+
+                if (this.dataset.editing === "true") {
+                    this.dataset.editing = "false";
+                    this.title = "Edit";
+                    this.innerHTML = '<i class="fas fa-pencil-alt"></i>'; // Change back to pencil icon
+                } else {
+                    this.dataset.editing = "true";
+                    this.title = "Save";
+                    this.innerHTML = '<i class="fas fa-save"></i>'; // Change icon to save
+                }
+            });
+        });
+
+        // Email Send Functionality
+        document.querySelectorAll('.send-email').forEach(button => {
+            button.addEventListener('click', function() {
+                const email = this.getAttribute('data-email');
+                alert(`Sending email to: ${email}`);
+                // Simulate sending email and disable button
+                this.disabled = true;
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,426 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    /* Ensures padding/margins are calculated better */
+}
+
+body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    color: #52525b;
+    background-color: #f4f4f4;
+    /* Light background for better contrast */
+}
+
+#left {
+    background-image: radial-gradient(#004102, #131313 100%);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* Centers the content vertically */
+}
+
+/* Container for the form */
+.container-sty {
+
+       
+        display: flex;
+        flex-direction: column; /* Side by side layout */
+        justify-content: space-between; /* Spread out form and image */
+        align-items: center; /* Vertically center items */
+        margin: 0 auto; /* Center the container horizontally */
+
+    background-color: white;
+    border-radius: 10px;
+  height: auto !important;
+    width: 70%;
+    padding: 3%;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    /* Adds a subtle shadow */
+}
+
+/* Input fields */
+.input-bottom-border {
+    border: none;
+    border-bottom: 1px solid #9e9e9e;
+    outline: none;
+    padding: 2%;
+    width: 90%;
+    line-height: 1;
+    margin-top: 20px;
+    /* Adds spacing between inputs */
+}
+
+.login-button {
+    background-color: #006103;
+    color: white;
+    width: 90%;
+    border: none;
+    border-radius: 6px;
+    padding: 3% !important;
+    margin-top: 30px;
+    /* Adds spacing before the button */
+    cursor: pointer;
+    /* Changes cursor on hover */
+}
+
+.login-button:hover {
+    background-color: #053f07;
+    /* Slightly darker shade on hover */
+}
+
+/* Social icons */
+i {
+    color: #52525b;
+}
+
+.Icons {
+    margin-left: 14%;
+    margin-right: 14%;
+}
+
+.Icons i {
+    margin-right: 10px;
+    /* Space between icons */
+}
+
+/* Image styling */
+.login-img-sty {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 65%;
+}
+
+img {
+    width: 100%;
+    height: auto;
+}
+
+span {
+    color: #006103;
+    font-weight: bold;
+}
+
+/* Placeholder styling */
+input::placeholder {
+    color: #9e9e9e;
+    font-size: 18px;
+}
+@media (min-width: 1440px) and (max-width: 2560px) {
+    /* Adjust container for large screens */
+    .container-sty {
+        height: 60vh;
+        width: 65%; 
+        padding: 6%; 
+        display: flex;
+        flex-direction: column; /* Side by side layout */
+        justify-content: space-between; /* Spread out form and image */
+        align-items: center; /* Vertically center items */
+        margin: 0 auto; /* Center the container horizontally */
+    }
+
+    
+    /* .form-container {
+        width: 45%;
+    } */
+
+    /* Adjust image container for large screens */
+    .image-container {
+        width: 45%; /* Image takes 45% as well */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    /* Image styling for large screens */
+    img {
+        width: 100%; /* Ensure the image fits its container */
+        max-width: 500px; /* Limit the maximum width */
+        height: auto; /* Maintain aspect ratio */
+    }
+
+    /* Full-width inputs in the form */
+    .input-bottom-border {
+        width: 100%;
+    }
+
+    /* Adjust the login button size */
+    .login-button {
+        width: 100%; /* Button takes 90% of form width */
+        
+        font-size: 18px; /* Slightly larger text */
+    }
+
+    /* Larger placeholder text for inputs */
+    input::placeholder {
+        font-size: 20px;
+    }
+
+    /* Adjust icon margins for better spacing */
+    .Icons {
+        margin-left: 14%;
+        margin-right: 14%;
+    }
+
+    .Icons i {
+        margin-right: 10px; /* Keep space between icons */
+    }
+}
+
+
+
+
+/* Screen sizes below 1024px (tablets and smaller desktops) */
+@media (min-width: 1050px) and (max-width: 1440px) {
+    body{
+        overflow-y: hidden !important ;
+    }
+    #left {
+        height: 105vh;
+        padding-left: 70px !important;
+        padding-right: 70px !important;
+        /* Adjusting padding for a better fit on laptop screens */
+    }
+
+    .container-sty {
+        height: auto;
+        width: 85% !important; /* Reduced width to ensure better fit on laptop */
+        padding: 40px !important; /* Reduced padding */
+    }
+    
+    img {
+        width: 60% !important; /* Reduced image size */
+    }
+
+    .input-bottom-border {
+        width: 100%;
+        /* Full width inputs */
+        
+    }
+    .login-button {
+        /* width: 90%; */
+        padding: 10px; /* Increase padding for large buttons */
+        font-size: 18px; /* Slightly larger text */
+    }
+}
+
+
+/* Screen sizes below 1024px (tablets and smaller desktops) */
+@media (min-width: 1024px) and (max-width: 1440px) {
+    body{
+        overflow-y: hidden !important ;
+    }
+    #left {
+        height: 105vh;
+        padding-left: 70px !important;
+        padding-right: 70px !important;
+        /* Adjusting padding for a better fit on laptop screens */
+    }
+
+    .container-sty {
+        height: auto;
+        width: 85% !important; /* Reduced width to ensure better fit on laptop */
+        padding: 40px !important; /* Reduced padding */
+    }
+    .login-button {
+        width: 100%;
+        /* Full-width button */
+        padding: 15px;
+        /* Larger button for easier touch */
+        font-size: 14px;
+        /* Slightly larger text */
+    }
+    img {
+        width: 60% !important; /* Reduced image size */
+    }
+
+    .input-bottom-border {
+        width: 100%;
+        /* Full width inputs */
+    }
+    #mainContent p {
+        font-size: 14px !important;
+    }
+    #mainContent h3 {
+        font-size: 21px !important;
+    }
+    input::placeholder {
+        color: #9e9e9e;
+        font-size: 14px !important;
+    }
+    #left p{
+        font-size: 15px !important;
+    }
+
+    
+}
+
+/* Screen sizes below 768px (tablets and landscape phones) */
+@media (min-width:768px)  and (max-width:992px){
+   
+    #left {
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+     padding: auto;
+        /* Add padding for better spacing */
+    }
+
+    .container-sty {
+      
+        width: 70%;
+        /* More narrow on smaller screens */
+        padding: 6%;
+        /* Increase padding */
+    }
+
+    .login-img-sty {
+        width: 75%;
+        /* Adjust image size */
+    }
+/* 
+    img {
+        width: 80% !important;
+    } */
+
+    .input-bottom-border {
+        width: 100%;
+        /* Full width inputs */
+    }
+    #mainContent p {
+        font-size: 12px !important;
+    }
+    #mainContent h3 {
+        font-size: 18px !important;
+    }
+
+    .login-button {
+        width: 100%;
+        /* Full-width button */
+        padding: 9px;
+        /* Larger button for easier touch */
+        font-size: 12px;
+        /* Slightly larger text */
+    }
+    #left p{
+        font-size: 13px !important;
+    }
+
+    .Icons {
+        margin-left: 5%;
+        margin-right: 5%;
+        /* Reduce margin */
+    }
+
+    input::placeholder {
+        color: #9e9e9e;
+        font-size: 12px !important;
+    }
+    #popupModal{
+        width: 60% !important;
+    }
+}
+
+/* Screen sizes below 730px (small phones) */
+@media (min-width: 320px) and (max-width: 768px) {
+    #left {
+        padding-bottom: 20px !important;
+        font-size: 10px;
+    }
+
+    .container-sty {
+        width: 85% !important;
+        padding: 6%;
+    }
+    .login-button {
+        width: 100%;
+        /* Full-width button */
+        padding: 8px;
+        /* Larger button for easier touch */
+        font-size: 10px;
+        /* Slightly larger text */
+    }
+    #mainContent p {
+        font-size: 10px !important;
+    }
+    #mainContent h3 {
+        font-size: 16px !important;
+    }
+    
+    input::placeholder {
+        color: #9e9e9e;
+        font-size: 10px !important;
+    }
+
+
+    .login-img-sty {
+        width: 70%;
+        /* Further reduce image size */
+    }
+
+    .input-bottom-border {
+        width: 100%;
+        /* Full width inputs */
+        padding: 10px;
+        /* Larger touch area */
+    }
+
+    #left p{
+        font-size: 11px !important;
+    }
+
+    .Icons {
+        margin-left: 3%;
+        margin-right: 3%;
+        /* Reduce margins even further */
+    }
+
+    .Icons i {
+        margin-right: 3px;
+        /* Very small space between icons */
+    }
+}
+
+/* Screen sizes below 320px (extra small phones) */
+@media (max-width: 320px) {
+    .login-button {
+        width: 100%;
+        /* Full-width button */
+        padding: 8px;
+        /* Larger button for easier touch */
+        font-size: 10px;
+        /* Slightly larger text */
+    }
+    #mainContent p {
+        font-size: 10px !important;
+    }
+    #mainContent h3 {
+        font-size: 16px !important;
+    }
+    
+    input::placeholder {
+        color: #9e9e9e;
+        font-size: 10px !important;
+    }
+
+
+    .login-img-sty {
+        width: 94%;
+        /* Further reduce image size */
+    }
+    .container-sty {
+        width: 85% !important;
+        /* Take almost full width */
+        padding: 6%;
+    }
+    #left p{
+        font-size: 11px !important;
+    }
+
+    #popupModal{
+        width: 92% !important;
+    }
+}

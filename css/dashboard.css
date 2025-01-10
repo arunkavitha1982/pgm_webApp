@@ -1,0 +1,256 @@
+body {
+    background-color: #ccc;
+}
+
+.gradient-blue {
+    background-image: linear-gradient(to bottom, #4bcbeb, #0e92b2);
+    font-size: small;
+}
+
+.gradient-pink {
+    background-image: linear-gradient(to bottom, #FE9496, #FE7096);
+    font-size: small;
+}
+
+.gradient-yellow {
+    background-image: linear-gradient(to bottom, #FFC831, #DB9806);
+    font-size: small;
+}
+
+.gradient-purple {
+    background-image: linear-gradient(to bottom, #9E58FF, #6A3EA8);
+    font-size: small;
+}
+
+.box {
+    color: white;
+    padding: 20px;
+    border-radius: 20px;
+    font-size: small;
+}
+
+.span {
+    float: inline-end;
+}
+
+#ticketSummary {
+    background-color: white;
+    border-radius: 13px;
+}
+
+
+
+
+
+
+.box-border {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.box2,
+.box3 {
+    padding: 20px;
+    text-align: center;
+    border-radius: 15px;
+    margin: 0 auto;
+    border: 1px solid #666;
+
+    margin-top: 15px;
+}
+
+.box2 h3,
+.box3 h3 {
+    font-size: 25px;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.box2 p {
+    font-size: 9px;
+    color: #666;
+}
+
+.box3 p {
+    font-size: 9px;
+    color: #666;
+}
+
+.no-scroll {
+    overflow: hidden;
+}
+
+.body-overlay {
+    background-color: rgba(0, 0, 0, 0.5);
+    transition: background-color 0.3s ease;
+}
+
+#ticketChart1 {
+    background-color: white;
+    padding: 15px;
+    border-radius: 10px;
+}
+
+.active {
+    border: 1px solid black;
+    height: 40px;
+}
+
+.btn {
+    font-size: small;
+}
+
+.responsive-canvas {
+    height: 120px;
+}
+
+
+@media (max-width:576px) {
+    .box-border {
+        height: 350px !important;
+
+    }
+
+    .active {
+        border: 1px solid black;
+        height: 30px;
+    }
+}
+
+@media (min-width:492px) and (max-width:2560px) {
+    #btn12months {
+        font-size: small;
+    }
+
+    #btnmonths {
+        font-size: small;
+    }
+}
+
+@media (max-width: 380px) {
+    #btnmonths {
+        font-size: 8px;
+    }
+
+}
+
+@media (min-width: 385px) and (max-width: 490px) {
+    #btnmonths {
+        font-size: 10px;
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    .responsive-canvas {
+        height: 80px;
+    }
+}
+
+@media only screen and (max-width: 490px) {
+    #btn12months {
+        display: none;
+
+    }
+}
+
+@media (max-width: 380px) {
+    #btnmonths {
+        font-size: 8px;
+    }
+    #ticketChart1{
+        padding: 0px !important;
+    }
+}
+
+@media (min-width: 385px) and (max-width: 490px) {
+    #btnmonths {
+        font-size: 10px;
+    }
+
+    
+}
+
+@media (max-width:1194px) {
+    .box {
+        color: white;
+        padding: 10px;
+        border-radius: 20px;
+        font-size: 12px;
+    }
+}
+
+
+@media (max-width:768px) {
+    .box {
+        color: white;
+        padding: 10px;
+        border-radius: 20px;
+        font-size: 12px;
+        /* width: 50%; */
+    }
+
+    #fix {
+        margin-top: 10%;
+    }
+
+    .box h3 {
+        padding-top: 10px;
+        font-size: 18px !important;
+    }
+}
+
+
+
+@media (max-width:500px) {
+    .box {
+        color: white;
+        padding: 10px;
+        border-radius: 20px;
+        font-size: 12px !important;
+    }
+
+    #fix {
+        margin-top: 12% !important;
+    }
+
+    .box h3 {
+        padding-top: 10px;
+        font-size: 18px !important;
+    }
+}
+
+@media (max-width:400px) {
+    #fix {
+        margin-top: 15% !important;
+    }
+}
+
+
+@media (max-width:340px) {
+    .box {
+        color: white;
+        padding: 10px;
+        border-radius: 20px;
+        font-size: 10px !important;
+    }
+
+    .box h3 {
+        padding-top: 10px;
+        font-size: 16px !important;
+    }
+}
+
+@media (min-width: 1000px) and (max-width: 1228px) {
+
+    .db {
+        font-size: 9px !important;
+        font-weight: 1200;
+    }
+
+    #btnmonths,
+    #btn12months {
+        font-size: 8px;
+    }
+
+}

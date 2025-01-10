@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.4.0/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700&display=swap">
+    <link rel="stylesheet" href="../css/nav.css">
+    <link rel="stylesheet" href="../css/home_profile.css">
+
+    <link rel="stylesheet" href="../css/image.css">
+    <script src="script/employeeProfile.js"></script>
+</head>
+<style>
+    .no-scroll {
+        overflow: hidden;
+    }
+
+
+    .span {
+        float: inline-end;
+    }
+
+    .modal-header {
+        background-image: radial-gradient(#004102, #131313) !important;
+        color: white;
+    }
+
+    .body-overlay {
+        background-color: rgba(0, 0, 0, 0.5);
+        transition: background-color 0.3s ease;
+    }
+
+    .input-sty::placeholder {
+        color: #a9a9a9;
+        transition: color 0.3s ease;
+    }
+
+    .placeholder-transparent::placeholder {
+        color: transparent;
+    }
+
+
+
+    .custom-modal-content {
+        background-color: #f8f9fa;
+        border-radius: 10px;
+        border: none;
+        width: 100%;
+    }
+
+    .custom-modal-body {
+        font-size: 18px;
+        text-align: center;
+        padding: 20px;
+        color: #333;
+    }
+
+    .custom-modal-footer {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px 60px;
+        border-top: none;
+    }
+
+    .btn-yes {
+        background-color: #006103;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        width: 30%;
+        transition: background-color 0.3s ease;
+        padding-top: 8px;
+        padding-bottom: 8px;
+    }
+
+    .btn-yes:hover {
+        background-color: #006103;
+        opacity: 0.8;
+        color: white;
+    }
+
+    .btn-no {
+        background-color: #dc3545;
+        color: white;
+        border: none;
+        width: 30%;
+        border-radius: 6px;
+        transition: background-color 0.3s ease;
+        padding-top: 8px;
+        padding-bottom: 8px;
+    }
+
+    .btn-no:hover {
+        background-color: #c82333;
+        color: white;
+        opacity: 0.8;
+    }
+
+    .w {
+        width: 91% !important;
+        margin-right: 12%;
+    }
+
+    /* Styling for the input box */
+    .multi-select-container {
+        position: relative;
+
+    }
+
+    .multi-select-input {
+        width: 100%;
+        padding: 10px;
+        border: 2px solid green;
+        border-radius: 10px;
+        color: black;
+        cursor: pointer;
+    }
+
+    /* Styling for the dropdown list */
+    .multi-select-dropdown {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 15% !important;
+        width: 78%;
+        border: 1px solid #ddd;
+        background-color: white;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        z-index: 10;
+        max-height: 150px;
+        overflow-y: auto;
+        border-radius: 5px;
+    }
+
+    /* Styling each option */
+    .multi-select-option {
+        display: flex;
+        align-items: center;
+        padding: 8px;
+        cursor: pointer;
+        font-family: Arial, sans-serif;
+        color: green;
+    }
+
+    .multi-select-option:hover {
+        background-color: #f0f0f0;
+    }
+
+    /* Hide default checkbox styling */
+    .multi-select-option input[type="checkbox"] {
+        margin-right: 10px;
+        cursor: pointer;
+    }
+
+    .multi-select-dropdown1 {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 15% !important;
+        width: 78%;
+        border: 1px solid #ddd;
+        background-color: white;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        z-index: 10;
+        max-height: 150px;
+        overflow-y: auto;
+        border-radius: 5px;
+    }
+
+    .multi-select-option1 {
+        display: flex;
+        align-items: center;
+        padding: 8px;
+        cursor: pointer;
+        font-family: Arial, sans-serif;
+        color: green;
+    }
+
+    .multi-select-option1:hover {
+        background-color: #f0f0f0;
+    }
+
+    /* Hide default checkbox styling */
+    .multi-select-option1 input[type="checkbox"] {
+        margin-right: 10px;
+        cursor: pointer;
+    }
+
+
+    .multi-select-dropdown3 {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 15% !important;
+        width: 78%;
+        border: 1px solid #ddd;
+        background-color: white;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        z-index: 10;
+        max-height: 150px;
+        overflow-y: auto;
+        border-radius: 5px;
+    }
+
+    .multi-select-option3 {
+        display: flex;
+        align-items: center;
+        padding: 8px;
+        cursor: pointer;
+        font-family: Arial, sans-serif;
+        color: green;
+    }
+
+    .multi-select-option3:hover {
+        background-color: #f0f0f0;
+    }
+
+    /* Hide default checkbox styling */
+    .multi-select-option3 input[type="checkbox"] {
+        margin-right: 10px;
+        cursor: pointer;
+    }
+
+    @media (max-width:577px) {
+        .w {
+            width: 120% !important;
+        }
+    }
+</style>
+
+<body>
+    <div id="nav" class="mb-5">
+        <div class="container d-flex justify-content-between align-items-center">
+            <div class="col-4">
+                <img src="../icon/menu icon.png" alt="" class="sidebar-toggle img-fluid" id="sidebarToggle"
+                    style="width: 20%;">
+            </div>
+            <div class="col-4 text-center">
+                <img src="../images/logo.png" alt="Logo" id="logo" style="max-width: 100%;">
+            </div>
+            <div class="col-4 text-end">
+                <img src="../icon/bell.png" alt="Profile Icon" id="icon">
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12 col-xl-2 col-md-2 col-lg-2 col-sty" id="left">
+                        <!-- Sidebar -->
+                        <div id="sidebar">
+                            <div id="sidebar-header" class="m-3 mb-5 mt-3">
+                                <img src="../images/logo.png" alt="Sidebar Logo" style="width: 100%;">
+                            </div>
+                            <div id="sidebar-content">
+                                <div class="list-group list-group-flush">
+
+                                    <a class="list-group-item list-group-item-action bg-purple dropdown-toggle" href="#"
+                                        id="ticketMenu" data-bs-toggle="collapse" data-bs-target="#ticketSubmenu"
+                                        aria-expanded="false" aria-controls="ticketSubmenu">
+                                        <img src="../icon/Mask group-3.png"><span>Ticket</span>
+                                    </a>
+                                    <div id="ticketSubmenu" class="collapse">
+                                        <ul class="list-group list-group-flush" id="list-group-flush">
+                                            <li class="list-group-item"><a href="AssignedTickets.html"
+                                                    class="bg-purple">Assigned Ticket</a></li>
+                                            <li class="list-group-item"><a href="inProcessTicket.html"
+                                                    class="bg-purple">InProgress Ticket</a></li>
+                                            <li class="list-group-item"><a href="completedTickets.html"
+                                                    class="bg-purple">Completed Ticket</a></li>
+                                        </ul>
+                                    </div>
+                                    <a href="employeeProfile.html"
+                                        class="list-group-item list-group-item-action bg-purple">
+                                        <img src="../icon/Mask group.png"><span>Profile</span>
+                                    </a>
+                                    <div style="position: fixed; bottom: 0; display: inline-flex;cursor: pointer;"
+                                        data-bs-toggle="modal" data-bs-target="#logoutModal" class="m-3">
+                                        <img src="../icon/Vector.png" style="width: 30px;margin-top: -5px;">
+                                        <span class="content text-white list-group-item">Logout</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Profile Form -->
+                    <div class="col-sm-12 col-xl-10 col-md-10 col-lg-10 col-sty" id="fix">
+                        <p id="header" class="pb-4"
+                            style="box-shadow: 0px 10px 10px 0px rgba(0, 0, 0, 0.5); margin-left: -12px; padding: 20px; margin-right: -12px; font-weight: bold;">
+                            <span id="e_name"></span>
+                            <span class="span">
+                                <span id="CName"></span>
+                                <img src="../icon/Mask group (2).png" id="Clogo" alt="" style="width: 40px;">
+                            </span>
+                        </p>
+
+                        <h3 class="text-center fw-bold  mt-4" id="header">Profile</h3>
+
+                        <div class="logo-sty">
+
+                            <label for="uploadLogo" class="upload-label d-flex justify-content-center"> <img
+                                    id="logoPreview" alt="Upload Logo" style="max-width: 100%; height: auto;"> <input
+                                    type="file" id="uploadLogo" accept="image/*" onchange="handleFileSelect(event)">
+                                <span class="icon-pencil"><i style="cursor: pointer;"
+                                        class="fas fa-pencil-alt"></i></span> </label>
+                        </div>
+
+
+
+                        <div class="container box-sty">
+                            <form id="settingsForm" class="p-5 text-center">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="material-textfield mb-4">
+                                            <input id="first_name" placeholder=" " type="text"
+                                                class="input-sty input-bottom-border" oninput="remove()">
+                                            <label class="label-sty">First name</label>
+                                            <div class="error-text" id="first_name_error"
+                                                style="display: none;color: red;">Please fill the field</div>
+                                            <span class="text-danger" id="errorFName"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="material-textfield mb-4">
+                                            <input id="last_name" placeholder=" " type="text" class="input-sty"
+                                                oninput="remove()">
+                                            <label class="label-sty">Last name</label>
+                                            <div class="error-text" id="last_name_error"
+                                                style="display: none;color: red;">Please fill the field</div>
+                                            <span class="text-danger" id="errorLName"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+
+                                    <div class="col-sm-6">
+                                        <div class="material-textfield">
+                                            <input type="email" id="email" name="email" placeholder=" "
+                                                class="input-sty" oninput="remove()">
+                                            <label>Email</label>
+                                            <div class="error-text" id="email_error" style="display: none;color: red;">
+                                                Please fill the field</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="material-textfield">
+                                            <input id="phone_number" placeholder=" " type="text" class="input-sty"
+                                                oninput="remove()">
+                                            <label class="label-sty">Phone Number</label>
+                                            <div class="error-text" id="phone_number_error"
+                                                style="display: none;color: red;">Please fill the field</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="material-textfield mb-4">
+                                            <input id="areas_covered" placeholder=" " type="text" class="input-sty"
+                                                oninput="remove()">
+                                            <label class="label-sty">Areas Covered</label>
+                                            <div class="error-text" id="areas_covered_error"
+                                                style="display: none;color: red;">Please fill the field</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-6">
+                                        <div class="material-textfield">
+                                            <input type="text" id="assigned_locations" name="assigned_locations"
+                                                placeholder=" " class="input-sty" oninput="remove()">
+                                            <label>Assigned Locations</label>
+                                            <div class="error-text" id="assigned_locations_error"
+                                                style="display: none;color: red;">Please fill the field</div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="material-textfield mb-4">
+                                            <input id="qualification" placeholder=" " type="text" class="input-sty"
+                                                oninput="remove()">
+                                            <label class="label-sty">Qualification</label>
+                                            <div class="error-text" id="qualification_error"
+                                                style="display: none;color: red;">Please fill the field</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-6">
+                                        <div class="material-textfield">
+                                            <input type="text" id="experience" name="experience" placeholder=" "
+                                                class="input-sty" oninput="remove()">
+                                            <label>Experience</label>
+                                            <div class="error-text" id="experience_error"
+                                                style="display: none;color: red;">Please fill the field</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="material-textfield mb-4">
+                                            <input id="skills" placeholder=" " type="text" class="input-sty"
+                                                oninput="remove()">
+                                            <label class="label-sty">skills</label>
+                                            <div class="error-text" id="skills_error" style="display: none;color: red;">
+                                                Please fill the field</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-6">
+                                        <div class="material-textfield">
+                                            <input type="text" id="driving_license" name="driving" placeholder=" "
+                                                class="input-sty" oninput="remove()">
+                                            <label>Driving License</label>
+                                            <div class="error-text" id="driving_license_error"
+                                                style="display: none;color: red;">Please fill the field</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="multi-select-container">
+                                            <div class="material-textfield">
+                                                <input type="text" id="status" name="status" placeholder=" "
+                                                    class="multi-select-input input-sty" readonly oninput="remove()">
+                                                <label>Status</label>
+                                                <div class="error-text" id="status_error"
+                                                    style="display: none;color: red;">Please fill the field</div>
+                                            </div>
+                                            <div class="multi-select-dropdown">
+                                                <label class="multi-select-option">
+                                                    <input type="radio" name="status" value="Active" id="isAvailable" />
+                                                    Active
+                                                </label>
+                                                <label class="multi-select-option">
+                                                    <input type="radio" name="status" value="InActive"
+                                                        id="IsNotAvailable" />
+                                                    InActive
+                                                </label>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="col-sm-6">
+                                        <div class="multi-select-container">
+                                            <div class="material-textfield">
+                                                <input type="text" id="availability" name="availability" placeholder=" "
+                                                    class="multi-select-input1 input-sty" readonly oninput="remove()">
+                                                <label>Available?</label>
+                                                <div class="error-text" id="availability_error"
+                                                    style="display: none;color: red;">Please fill the field</div>
+                                            </div>
+                                            <div class="multi-select-dropdown1">
+                                                <label class="multi-select-option1">
+                                                    <input type="radio" name="availability" value="Yes" id="Yes" />
+                                                    Yes
+                                                </label>
+                                                <label class="multi-select-option1">
+                                                    <input type="radio" name="availability" value="No" id="No" />
+                                                    No
+                                                </label>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="material-textfield mb-4">
+                                            <input id="street" placeholder=" " type="text" class="input-sty"
+                                                oninput="remove()">
+                                            <label class="label-sty">Street</label>
+                                            <div class="error-text" id="street_error" style="display: none;color: red;">
+                                                Please fill the field</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-6">
+                                        <div class="multi-select-container">
+                                            <div class="material-textfield">
+                                                <input type="text" class="multi-select-input3 input-sty" readonly>
+                                                <label>Specialization</label>
+                                            </div>
+                                            <div class="multi-select-dropdown3">
+                                                <label class="multi-select-option3">
+                                                    <input type="checkbox" value="AC" id="ac"/> AC
+                                                </label>
+                                                <label class="multi-select-option3">
+                                                    <input type="checkbox" value="Refrigerator" id="refrigerator"/> Refrigerator
+                                                </label>
+                                            </div>
+                                        </div>
+
+                                        <!-- Hidden field to store the API format -->
+                                        <input type="hidden" id="specialization-api-format" name="specialization" />
+                                        <!-- Error Message -->
+                                        <div class="error-text" id="specialization_error"
+                                            style="display: none; color: red;">
+                                            Please select at least one specialization.
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="material-textfield">
+                                            <input type="text" id="city" name="city" placeholder=" " class="input-sty"
+                                                oninput="remove()">
+                                            <label>City</label>
+                                            <div class="error-text" id="city_error" style="display: none;color: red;">
+                                                Please fill the field</div>
+                                            <div class="error-text" id="city_error" style="display: none;color: red;">
+                                                Please fill the field</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="material-textfield">
+                                            <input type="text" id="zip" name="zip" placeholder=" " class="input-sty"
+                                                oninput="remove()">
+                                            <label>Zip</label>
+                                            <div class="error-text" id="zip_error" style="display: none;color: red;">
+                                                Please fill the field</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="d-flex justify-content-center">
+                                    <button type="button" id="submit-button" class="btn-green float-end"
+                                        onclick="validateForm()">Update</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content custom-modal-content">
+
+                <!-- Modal Header with Title -->
+                <div class="modal-header justify-content-center">
+                    <h5 class="modal-title" id="logoutModalLabel">Logout</h5>
+
+                </div>
+
+                <!-- Modal Body -->
+                <div class="modal-body custom-modal-body">
+                    Are you sure you want to log out?
+                </div>
+
+                <!-- Modal Footer -->
+                <div class="modal-footer custom-modal-footer">
+                    <button type="button" class="btn-yes">Yes</button>
+                    <button type="button" class="btn-no" data-bs-dismiss="modal">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="loading" id="l">
+        <div class="spinner"></div>
+    </div>
+    <script>
+
+
+        function remove() {
+            const inputs = document.querySelectorAll('.input-sty');
+
+            inputs.forEach(input => {
+                const errorId = input.id + '_error'; // Construct the error message ID dynamically
+                const errorText = document.getElementById(errorId); // Get the error message element by ID
+                errorText.style.display = 'none'; // Hide the error message
+            });
+        }
+
+        function validateForm() {
+            const inputs = document.querySelectorAll('.input-sty'); // Select all inputs inside the form
+            let isValid = true; // Flag to track form validity
+
+            inputs.forEach(input => {
+                const errorId = input.id + '_error'; // Construct the error message ID dynamically
+                const errorText = document.getElementById(errorId); // Get the error message element by ID
+
+                if (input.value.trim() === '') {
+                    isValid = false; // Mark form as invalid
+                    if (errorText) {
+                        errorText.style.display = 'block'; // Show the error message
+                    }
+                } else {
+                    if (errorText) {
+                        errorText.style.display = 'none'; // Hide the error message
+                    }
+                }
+            });
+
+            if (isValid) {
+                // If the form is valid, you can proceed with your submit logic
+               //  console.log('Form is valid!');
+            } else {
+               //  console.log('Please fill out all required fields.');
+            }
+        }
+
+        // JavaScript to preview the uploaded image
+
+        document.querySelector('.btn-yes').addEventListener('click', function () {
+            localStorage.clear();
+            window.location.href = '../index.html';
+        });
+
+        document.getElementById('sidebarToggle').addEventListener('click', function () {
+            var sidebar = document.getElementById('left');
+            var body = document.body;
+            var box = document.querySelector(".box-sty");
+            var input = document.querySelectorAll(".input-sty");
+
+            sidebar.classList.toggle('active');
+
+            if (sidebar.classList.contains('active')) {
+                // Sidebar is active (open)
+                body.classList.add('no-scroll', 'body-overlay');
+                box.style.backgroundColor = "transparent";
+
+                input.forEach(function (inputElement) {
+                    inputElement.style.backgroundColor = "transparent";  // Input background transparent
+                    inputElement.classList.add('placeholder-transparent');  // Make placeholder transparent
+                });
+            } else {
+                body.classList.remove('no-scroll', 'body-overlay');
+                box.style.backgroundColor = "";
+
+                input.forEach(function (inputElement) {
+                    inputElement.style.backgroundColor = "";  // Reset background color
+                    inputElement.classList.remove('placeholder-transparent');  // Reset placeholder transparency
+                });
+            }
+        });
+
+        function updateSelection(dropdownSelector, inputSelector) {
+            const checkboxes = document.querySelectorAll(`${dropdownSelector} input[type='checkbox']`);
+            const selectedValues = Array.from(checkboxes)
+                .filter(checkbox => checkbox.checked)
+                .map(checkbox => checkbox.value.trim());
+
+            // Update the input field with a comma-separated string of selected values
+            const inputField = document.querySelector(inputSelector);
+            inputField.value = selectedValues.join(', ');
+        }
+
+
+
+
+        function updateSelectionRadio(dropdownSelector, inputSelector) {
+            const radios = document.querySelectorAll(`${dropdownSelector} input[type='radio']`);
+            const selectedValue = Array.from(radios)
+                .filter(radio => radio.checked)
+                .map(radio => radio.value.trim())[0];  // Only one radio button will be checked
+
+            // Update the input field with the selected value
+            const inputField = document.querySelector(inputSelector);
+            inputField.value = selectedValue || '';  // Display selected value or an empty string if none is selected
+        }
+
+
+
+        let currentDropdown = null;
+
+        // Function to toggle a dropdown
+        function toggleDropdown(dropdownClass) {
+            const dropdown = document.querySelector(dropdownClass);
+
+            // Close the currently open dropdown if it's not the same as the one being toggled
+            if (currentDropdown && currentDropdown !== dropdown) {
+                currentDropdown.style.display = "none";
+            }
+
+            // Toggle the clicked dropdown
+            if (dropdown.style.display === "block") {
+                dropdown.style.display = "none";
+                currentDropdown = null; // Reset the current dropdown
+            } else {
+                dropdown.style.display = "block";
+                currentDropdown = dropdown; // Set the current dropdown
+            }
+        }
+
+        // Event listeners for dropdown toggles
+        document.querySelector(".multi-select-input").addEventListener('click', () => toggleDropdown(".multi-select-dropdown"));
+        document.querySelector(".multi-select-input1").addEventListener('click', () => toggleDropdown(".multi-select-dropdown1"));
+        document.querySelector(".multi-select-input3").addEventListener('click', () => toggleDropdown(".multi-select-dropdown3"));
+
+        // Automatically close dropdown when two options are selected
+        document.querySelectorAll(".multi-select-dropdown3 .specialization-checkbox").forEach(checkbox => {
+            checkbox.addEventListener("change", () => {
+                const dropdown = document.querySelector(".multi-select-dropdown3");
+                const inputField = document.querySelector(".multi-select-input3");
+                const hiddenInput = document.querySelector("#specialization-api-format");
+
+                // Get selected options
+                const selectedOptions = Array.from(
+                    document.querySelectorAll(".multi-select-dropdown3 .specialization-checkbox:checked")
+                ).map(cb => cb.value);
+
+                // Update the visible input and hidden field
+                inputField.value = selectedOptions.join(", ");
+                hiddenInput.value = JSON.stringify(selectedOptions);
+
+                // Automatically close the dropdown if two options are selected
+                if (selectedOptions.length === 2) {
+                    dropdown.style.display = "none";
+                    currentDropdown = null; // Reset the current dropdown
+                }
+            });
+        });
+
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', function (event) {
+            const isClickInside = event.target.closest(".multi-select-input") ||
+                event.target.closest(".multi-select-input1") ||
+                event.target.closest(".multi-select-input3") ||
+                (currentDropdown && event.target.closest(currentDropdown.className));
+
+            if (!isClickInside) {
+                // Close the currently open dropdown
+                if (currentDropdown) {
+                    currentDropdown.style.display = "none";
+                    currentDropdown = null;
+                }
+            }
+        });
+        // Event listeners for checkbox changes
+        document.querySelectorAll(".multi-select-option input").forEach(checkbox => {
+            checkbox.addEventListener('change', () => updateSelectionRadio(".multi-select-dropdown", ".multi-select-input"));
+        });
+
+        document.querySelectorAll(".multi-select-option3 input").forEach(checkbox => {
+            checkbox.addEventListener('change', () => updateSelection(".multi-select-dropdown3", ".multi-select-input3"));
+        });
+        document.querySelectorAll(".multi-select-option1 input").forEach(radio => {
+            radio.addEventListener('change', () => updateSelectionRadio(".multi-select-dropdown1", ".multi-select-input1"));
+        });
+
+
+        // Close the dropdown if clicked outside
+        window.onclick = function (event) {
+            const container = document.querySelector(".multi-select-container");
+            const dropdown = document.querySelector(".multi-select-dropdown");
+            if (!container.contains(event.target)) {
+                dropdown.style.display = "none";
+            }
+        }
+
+        document.getElementById('CName').textContent = localStorage.getItem("CName");
+        document.getElementById('e_name').textContent = localStorage.getItem("e_name");
+    </script>
+    <script src="../script/navbar.js"></script>
+</body>
+
+</html>

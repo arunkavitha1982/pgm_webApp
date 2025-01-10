@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700&display=swap">
+    <link rel="stylesheet" href="css/signUp.css">
+    <title>Login</title>
+
+    <!-- Google Sign-In Script -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+
+<style>
+    /* Loading  */
+    .loading {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 9999;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .blur-background {
+        filter: blur(5px);
+    }
+
+    .loading .spinner {
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid #004102;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        animation: spin 1s linear infinite;
+    }
+
+    #popupModal {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 33%;
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+        z-index: 9999;
+        display: none;
+    }
+
+    #popupModal h3 {
+        margin-bottom: 15px;
+    }
+
+    #popupModal p {
+        margin-bottom: 20px;
+    }
+
+    #popupModal .close-btn {
+        background: #004102;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        cursor: pointer;
+        border-radius: 5px;
+    }
+
+    .modal-content {
+        padding: 20px;
+        text-align: center;
+    }
+
+    @keyframes spin {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+    @media (max-width:1065px) {
+        #header{
+            font-size: 26px;
+        }
+    }
+
+
+    @media (max-width:810px) {
+        #header{
+            font-size: 20px;
+        }
+    }
+
+    @media (max-width:767px) {
+            #popupModal{
+                width: 62% !important;
+            }
+        }
+
+        @media (max-width:450px) {
+            #popupModal{
+                width: 92% !important;
+            }
+        }
+
+        @media (max-width:350px) {
+            #popupModal{
+                width: 92% !important;
+            }
+        }
+</style>
+
+<body>
+    <div class="container-fluid" id="mainContent">
+        <div class="row">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12 col-xl-6 col-md-6 col-lg-6 col-sty d-flex flex-column justify-content-center align-items-center order-2 order-xl-1 order-md-1 order-sm-2"
+                        id="left">
+                        <div class="container container-sty text-center">
+                            <h2 class="text-center m-3" id="header">Welcome Back</h2>
+                            <input type="text" class="input-bottom-border mt-3" placeholder="Username/Phone Number"
+                                id="username" required>
+                            <input id="password" placeholder="Password" type="password" class="input-bottom-border mt-3"
+                                required>
+
+                            <button type="submit" class="mt-5 login-button"
+                                onclick="handleSubmit(event)">Submit</button>
+
+                            <p class="mt-4 fw-bold" id="login">or</p>
+                            <div class="row mt-2 d-flex justify-content-center align-items-center">
+                                <p class="g_id_signin mt-4"></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-xl-6 col-md-6 col-lg-6 col-sty d-flex flex-column justify-content-center align-items-center order-1 order-xl-2 order-md-2 order-sm-1"
+                        id="image">
+                        <img src="images/login img.png" alt="Login Image" class="m-4 p-5 img-fluid login-img-sty">
+                        <h3 class="text-center">
+                            Welcome to <span>CraftPlanPro</span>
+                        </h3>
+                        <p class="text-center pt-2" id="conte">
+                            Streamline Task Allocation and Optimize Employee Productivity
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Spinner -->
+    <div class="loading" id="l">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Popup Modal -->
+    <div id="popupModal">
+        <div class="modal-content">
+            <h3 id="head">Invalid URL</h3>
+            <p id="txt"></p>
+            <button class="close-btn" id="closePopup">Continue</button>
+        </div>
+    </div>
+
+    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
+    <script>
+        
+        // Initialize Google Sign-In and other features
+        window.onload = function () {
+            google.accounts.id.initialize({
+                client_id: '105136553260-b1aavp1n75f8caktbvuiipgr92at4pth.apps.googleusercontent.com', // Replace with your actual Google Client ID
+                callback: handleCredentialResponse
+            });
+
+            // Render the Google Sign-In button
+            google.accounts.id.renderButton(
+                document.querySelector(".g_id_signin"),
+                { theme: "outline", size: "large" }
+            );
+
+            google.accounts.id.prompt();
+        };
+
+        // Decode JWT token from Google Sign-In
+        function decodeJwtResponse(token) {
+            const base64Url = token.split('.')[1];
+            const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+            const jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
+                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+            }).join(''));
+            return JSON.parse(jsonPayload);
+        }
+
+        // Handle Google Sign-In response
+        function handleCredentialResponse(response) {
+            document.getElementById('l').style.display = 'flex';
+            const mainContent = document.getElementById('mainContent');
+            const userDetails = decodeJwtResponse(response.credential);
+            const apiUrl = `https://m4j8v747jb.execute-api.us-west-2.amazonaws.com/dev/account_check/${userDetails.email}`;
+
+            fetch(apiUrl)
+                .then(response => {
+                   
+                    if (!response.ok) {
+                        showPopupModal("User ID not found");
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // console.log(data)
+                    if (data.isSuperAdmin) {
+                       
+                        setTimeout(() => {
+                            window.location.href = 'companies/company.html';
+                        }, 1000);
+                    } else if (data.isadmin) {
+                        companyIDget(userDetails.email);
+                        setTimeout(() => {
+                            window.location.href = 'dashboard.html';
+                        }, 1000);
+                    } else if (data.isEmployee) {
+                        getEmpDetails(userDetails.email);
+                        setTimeout(() => {
+                            localStorage.setItem("userId",userDetails.email);
+                            window.location.href = 'employee_page/AssignedTickets.html';
+                        }, 1000);
+                    }
+                })
+                .catch(error => {
+                    document.getElementById('l').style.display = 'none';
+                    console.error('Fetch error:', error);
+                });
+        }
+
+        function getEmpDetails(user_id) {
+            const mainContent = document.getElementById('mainContent');
+          
+            fetch(`https://m4j8v747jb.execute-api.us-west-2.amazonaws.com/dev/signed_up_employee_detail_get/${user_id}`)
+
+                .then(response => {
+                    document.getElementById('l').style.display = 'none';
+                    if (!response.ok) {
+                        showPopupModal("User ID not found");
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    localStorage.setItem("cid", data.company_id);
+                    localStorage.setItem("CName",data.company_name);
+                    localStorage.setItem("Clogo",data.logo);
+                    localStorage.setItem("eid", data.employee_id);
+                    localStorage.setItem("e_name", data.e_name);
+                })
+                .catch(error => {
+                    document.getElementById('l').style.display = 'none';
+                    console.error('Fetch error:', error);
+                });
+        }
+
+
+        // Fetch and store company ID
+        function companyIDget(user_id) {
+            const mainContent = document.getElementById('mainContent');
+          
+            fetch(`https://m4j8v747jb.execute-api.us-west-2.amazonaws.com/dev/sign_up/get/${user_id}`)
+
+                .then(response => {
+                    document.getElementById('l').style.display = 'none';
+                    if (!response.ok) {
+                        showPopupModal("User ID not found");
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    localStorage.setItem("cid", data.company_id);
+                    localStorage.setItem("CName",data.company_name);
+                    localStorage.setItem("Clogo",data.logo)
+                })
+                .catch(error => {
+                    document.getElementById('l').style.display = 'none';
+                    console.error('Fetch error:', error);
+                });
+        }
+
+        function getEmployeeID(url) {
+            fetch(`https://m4j8v747jb.execute-api.us-west-2.amazonaws.com/dev/employee_get_based_invite_url`,
+            {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({signup_url : url})
+            }
+            )
+                .then(response => {
+                    document.getElementById('l').style.display = 'none';
+                    if (!response.ok) {
+                        showPopupModal("Employee ID not found");
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log(data)
+                    localStorage.setItem("eid", data.employee_id);
+                    localStorage.setItem("e_name", data.first_name+ " "+ data.last_name);
+                })
+                .catch(error => {
+                    document.getElementById('l').style.display = 'none';
+                    console.error('Fetch error:', error);
+                });
+        }
+
+        // Handle manual login form submission
+        function handleSubmit(event) {
+            event.preventDefault();
+            document.getElementById('l').style.display = 'flex'; // Show loading spinner
+
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+
+            fetch(`https://m4j8v747jb.execute-api.us-west-2.amazonaws.com/dev/sign_up/get/${username}`)
+                .then(response => {
+                  
+                    if (!response.ok) {
+                        showPopupModal("User ID not found");
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    localStorage.setItem("cid", data.company_id);
+                    localStorage.setItem("CName",data.company_name)
+                    localStorage.setItem("Clogo",data.logo)
+                    if (data.password === password && data.is_employee === 0) {
+                        setTimeout(() => {
+                            window.location.href = 'dashboard.html';
+                        }, 1000);
+                    } else if (data.password === password && data.is_employee === 1) {
+                        getEmployeeID(data.signup_url);
+                        setTimeout(() => {
+                            window.location.href = 'employee_page/AssignedTickets.html';
+                        }, 1200);
+                    } else if (password == "" && username == "") {
+                        showPopupModal("Enter the Username And password")
+                    }
+                    else {
+                        showPopupModal("Incorrect Password or Username.");
+                    }
+                })
+                .catch(error => {
+                    document.getElementById('l').style.display = 'none';
+                    console.error('Fetch error:', error);
+                });
+        }
+
+        // Show popup modal with message
+        function showPopupModal(message) {
+            const head = document.getElementById("head")
+            const mainContent = document.getElementById('mainContent');
+            head.textContent = ''
+            document.getElementById("txt").textContent = message;
+            document.getElementById("txt").style.fontWeight = "bold";
+            popupModal.style.display = 'block';
+            mainContent.classList.add('blur-background');
+            closePopup.addEventListener('click', function () {
+                window.location.href = 'index.html';
+            });
+        }
+
+        // Facebook login function
+        function loginWithFacebook() {
+            FB.login(function (response) {
+                if (response.status === 'connected') {
+                    window.location.href = 'dashboard.html';
+                } else {
+                    console.log('User did not authorize the app');
+                }
+            }, { scope: 'public_profile,email' });
+        }
+    </script>
+</body>
+
+</html>
